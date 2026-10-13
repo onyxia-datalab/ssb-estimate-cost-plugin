@@ -23,18 +23,24 @@ export async function createEstimatedCost(ctx: OnyxiaCtx) {
             return null;
         }
 
-        const estimatedCost = estimateWorkDayCost(launcher.helmValues.resources);
+        const resources = launcher.helmValues.resources;
+        const estimatedCost = estimateWorkDayCost(resources);
+        const usesRequests =
+            typeof resources === "object" &&
+            resources !== null &&
+            !Array.isArray(resources) &&
+            resources.requests !== undefined;
 
         return React.createElement(Text, {
             className: classes.root,
             typo: "body 2",
             htmlComponent: "div",
             componentProps: { lang: "nb", "aria-live": "polite" },
-            children: `Estimert pris per arbeidsdag (${pricing.hoursPerWorkDay} timer): ${
-                estimatedCost === undefined ? "—" : formatPrice.format(estimatedCost)
-            }`
+            children: `Estimert pris per arbeidsdag (${pricing.hoursPerWorkDay} timer${
+                usesRequests ? ", garanterte ressurser" : ""
+            }): ${estimatedCost === undefined ? "—" : formatPrice.format(estimatedCost)}`
         });
-    };
+    }
 
     const useStyles = tss.withName("SsbEstimatedCost").create(({ theme }) => ({
         root: {

@@ -3,15 +3,19 @@
 <img width="1320" height="359" alt="Image" src="https://github.com/user-attachments/assets/8215a22f-8134-4d5d-8c3b-c79e0340e37d" />  
 
 Ports `web/public/custom-resources/ssb-plugin.ts` to the current Onyxia plugin API.
-It displays `Estimert pris per arbeidsdag (8 timer)` in the launcher's `Ressurser`
+It displays an eight-hour workday cost estimate in the launcher's resource
 accordion and updates automatically when CPU or memory changes, including YAML
-edits. The estimate uses `helmValues.resources.cpu` and `helmValues.resources.memory`.
+edits. The section is identified from the form group's `resources` Helm path, so
+its title can be `Ressurser`, `Resources (CPU/RAM)`, or another chart-defined title.
+Modern charts use `helmValues.resources.requests.cpu` and `.memory` to estimate the
+cost of guaranteed resources, as indicated in the label. Legacy charts using
+`helmValues.resources.cpu` and `.memory` are also supported.
 
 The plugin uses `window.onOnyxiaCtxReady`, `ctx.import`, `ctx.declareComponent`, and
 `useCoreState("launcher", "mainView")`. It creates its own container next to the
 existing resource inputs; no changes to Onyxia's source or additional IDs are needed.
 
-Pricing constants and the accordion title are in `src/config.ts`. The rates and
+Pricing constants are in `src/config.ts`. The rates and
 USD/NOK conversion are preserved from the original plugin (5 February 2025), rather
 than being fetched live. CPU values can be cores or millicores; memory can be bytes,
 binary units such as Mi/Gi, or decimal units such as M/G. Missing or unsupported
@@ -36,7 +40,7 @@ SSB module script injected into its HTML head. Other app settings come from your
 existing configuration. This overrides `CUSTOM_HTML_HEAD` only for that dev server;
 it does not edit your YAML configuration or delete other custom resources.
 Open the URL printed by this dev server, then a chart with
-the `Ressurser` accordion and change CPU/memory to see the estimate update.
+the resource accordion and change CPU/memory to see the estimate update.
 
 ## Validation and production build
 

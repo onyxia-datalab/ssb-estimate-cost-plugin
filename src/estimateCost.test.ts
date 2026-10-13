@@ -9,6 +9,23 @@ test("preserves the legacy eight-hour estimate for millicores and GiB", () => {
     );
 });
 
+test("modern charts price reserved resources, not the limits", () => {
+    assert.equal(
+        estimateWorkDayCost({
+            requests: { cpu: "100m", memory: "2Gi" },
+            limits: { cpu: "15000m", memory: "50Gi" }
+        }),
+        estimateWorkDayCost({ cpu: "100m", memory: "2Gi" })
+    );
+    assert.equal(
+        estimateWorkDayCost({
+            requests: { cpu: "invalid" },
+            limits: { cpu: 1, memory: "1Gi" }
+        }),
+        undefined
+    );
+});
+
 test("equivalent CPU and memory quantities produce the same estimate", () => {
     const expected = estimateWorkDayCost({ cpu: "500m", memory: "1Gi" });
     for (const cpu of [0.5, "0.5", ".5"]) {

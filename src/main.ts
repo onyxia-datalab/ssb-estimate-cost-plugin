@@ -1,10 +1,9 @@
 import { createEstimatedCost } from "./EstimatedCost";
-import { resourceSectionTitle } from "./config";
+import { getResourceSectionTitle } from "./resourceSection";
 
 window.onOnyxiaCtxReady = async ctx => {
-
-    console.log("SSB Plugin mounted");
-
+    const { getCore } = await ctx.import("core");
+    const core = await getCore();
     const { EstimatedCost } = await createEstimatedCost(ctx);
     const { mount } = ctx.declareComponent(EstimatedCost);
 
@@ -13,6 +12,10 @@ window.onOnyxiaCtxReady = async ctx => {
         let container: HTMLElement | null = null;
 
         const sync = () => {
+            const launcher = core.states.launcher.getMainView();
+            const resourceSectionTitle = launcher.isReady
+                ? getResourceSectionTitle(launcher.rootForm)
+                : undefined;
             const page = document.getElementById("page-container-launcher");
             const accordion = Array.from(
                 page?.querySelectorAll("[data-title]") ?? []
@@ -42,6 +45,7 @@ window.onOnyxiaCtxReady = async ctx => {
             container = document.createElement("div");
             parent.prepend(container);
             mount(container);
+            console.log("SSB Plugin mounted");
         };
 
         const observer = new MutationObserver(sync);

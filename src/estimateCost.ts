@@ -6,7 +6,18 @@ export function estimateWorkDayCost(resources: unknown): number | undefined {
         return undefined;
     }
 
-    const { cpu, memory } = resources as Record<string, unknown>;
+    // Modern charts separate reserved resources (requests) from their maximum limits.
+    const values = resources as Record<string, unknown>;
+    const allocation = values.requests === undefined ? values : values.requests;
+    if (
+        typeof allocation !== "object" ||
+        allocation === null ||
+        Array.isArray(allocation)
+    ) {
+        return undefined;
+    }
+
+    const { cpu, memory } = allocation as Record<string, unknown>;
     const cpuCores = parseCpu(cpu);
     const memoryGi = parseMemory(memory);
 
