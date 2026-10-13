@@ -45,7 +45,6 @@ window.onOnyxiaCtxReady = async ctx => {
             container = document.createElement("div");
             parent.prepend(container);
             mount(container);
-            console.log("SSB Plugin mounted");
         };
 
         const observer = new MutationObserver(sync);
