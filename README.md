@@ -1,4 +1,6 @@
-# SSB plugin
+# SSB plugin  
+
+<img width="1320" height="359" alt="Image" src="https://github.com/user-attachments/assets/8215a22f-8134-4d5d-8c3b-c79e0340e37d" />  
 
 Ports `web/public/custom-resources/ssb-plugin.ts` to the current Onyxia plugin API.
 It displays `Estimert pris per arbeidsdag (8 timer)` in the launcher's `Ressurser`
