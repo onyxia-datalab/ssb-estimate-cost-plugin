@@ -1,0 +1,4 @@
+/node_modules
+/.build
+/ssb-plugin.zip
+!/package-lock.json
